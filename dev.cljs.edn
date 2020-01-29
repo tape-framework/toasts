@@ -1,0 +1,7 @@
+^{:watch-dirs ["src" "test"]
+  :css-dirs ["resources/public/tape"]
+  :ring-handler tape.dev.server/handler}
+{:main tape.toasts.devcards
+ :devcards true
+ :closure-defines {"re_frame.trace.trace_enabled_QMARK_" true}
+ :preloads [devtools.preload day8.re-frame-10x.preload]}

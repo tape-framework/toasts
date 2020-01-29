@@ -1,0 +1,35 @@
+.toasts {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 100;
+  margin: 8px;
+  width: 250px;
+}
+
+.toast {
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.toast-enter {
+  opacity: 0;
+  max-height: 0;
+}
+
+.toast-enter-active {
+  opacity: 1;
+  max-height: 350px;
+  transition: max-height .15s, opacity .15s linear .15s;
+}
+
+.toast-exit {
+  opacity: 1;
+  max-height: 350px;
+}
+
+.toast-exit-active {
+  opacity: 0;
+  max-height: 0;
+  transition: max-height .15s linear .15s, opacity .15s;
+}
