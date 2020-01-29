@@ -32,7 +32,12 @@ Add toasts listing to a layout view via `toasts.v/index` partial:
 ```
 
 The style is based on [Bulma](https://bulma.io/), but you can use your own
-style based on it's classes or make your own partial for listing.
+style based on it's classes or make your own partial for listing. To include
+the style add:
+
+```clojure
+[:link {:rel "stylesheet" :href "/tape/toasts.css"}]
+```
 
 #### Create a toast
 
