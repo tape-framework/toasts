@@ -82,8 +82,8 @@
 ;;; Subs
 
 (defn toasts
-  {::c/sub    true
-   ::c/signal signal}
+  {::c/sub     true
+   ::c/signals [signal]}
   [db _] db)
 
 ;;; Module
