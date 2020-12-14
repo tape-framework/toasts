@@ -1,11 +1,7 @@
 (ns tape.toasts.controller
   "Toasts controller module."
-  {:tape.mvc.controller/interceptors [inject]}
-  (:refer-clojure :exclude [set])
   (:require
    [medley.core :as m]
-   [reagent.core :as r]
-   [re-frame.cofx :as cofx]
    [tape.mvc.controller :as c :include-macros true]
    [tape.tools.timeouts.controller :as timeouts.c]))
 
@@ -13,24 +9,6 @@
 
 (defn make [icon message key]
   {:icon icon, :message message, :open true, :key key})
-
-;;; Toasts DB
-
-(defonce db (r/atom {}))
-
-(defn signal
-  ([_] db)
-  ([_ _] db))
-
-;;; Cofx
-
-(defn ^{::c/cofx ::db} add [m] (assoc m ::db @db))
-
-(def inject (cofx/inject-cofx ::db))
-
-;;; Fx
-
-(defn ^{::c/fx ::db} set [m] (reset! db m))
 
 ;;; Events Utils
 
@@ -49,17 +27,16 @@
 ;;; Events
 
 (defn ^::c/event-fx create
-  [{::keys [db]} [_ icon message]]
-  (let [key   (next-key db)
+  [{:keys [db]} [_ icon message]]
+  (let [key   (next-key (::toasts db))
         toast (make icon message key)]
-    {::db             (assoc db key toast)
+    {:db              (assoc-in db [::toasts key] toast)
      ::timeouts.c/set (timeout toast)}))
 
-(defn ^::c/event-fx assoc-timeout-id
-  [{::keys [db]}
-   [_ toast timeout-id]]
-  {::db (m/update-existing db (:key toast)
-                           assoc :timeout-id timeout-id)})
+(defn ^::c/event-db assoc-timeout-id
+  [db [_ toast timeout-id]]
+  (m/update-existing-in db [::toasts (:key toast)]
+                        assoc :timeout-id timeout-id))
 
 (defn ^::c/event-fx set-timeout
   [_cofx [_ toast]]
@@ -67,24 +44,21 @@
     {::timeouts.c/set (timeout toast)}))
 
 (defn ^::c/event-fx clear-timeout
-  [{::keys [db]} [_ toast]]
+  [{:keys [db]} [_ toast]]
   (when-let [timeout-id (:timeout-id toast)]
     {::timeouts.c/clear timeout-id
-     ::db               (m/update-existing db (:key toast)
-                                           dissoc :timeout-id)}))
+     :db                (m/update-existing-in db [::toasts (:key toast)]
+                                              dissoc :timeout-id)}))
 
 (defn ^::c/event-fx delete
-  [{::keys [db]} [_ toast]]
+  [{:keys [db]} [_ toast]]
   (let [{:keys [key timeout-id]} toast]
-    (cond-> {::db (dissoc db key)}
+    (cond-> {:db (m/dissoc-in db [::toasts key])}
             (some? timeout-id) (assoc ::timeouts.c/clear timeout-id))))
 
 ;;; Subs
 
-(defn toasts
-  {::c/sub     true
-   ::c/signals [signal]}
-  [db _] db)
+(defn ^::c/sub toasts [db _] (::toasts db))
 
 ;;; Module
 

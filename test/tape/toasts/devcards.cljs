@@ -32,7 +32,7 @@
           [button :info]]]
         [:div.column {:style {:overflow-x "scroll"}}
          [:pre {:style {:max-height "200px"}}
-          (with-out-str (pp/pprint @toasts.c/db))]]
+          (with-out-str (pp/pprint @(rf/subscribe [::toasts.c/toasts])))]]
         [:div.column {:style {:position "relative"}}
          [toasts.v/index]]]])))
 
