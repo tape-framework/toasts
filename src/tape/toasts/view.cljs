@@ -22,4 +22,4 @@
 
 ;;; Module
 
-(v/defmodule tape.toasts.controller)
+(v/defmodule)
