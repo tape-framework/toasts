@@ -26,31 +26,36 @@
 
 ;;; Events
 
-(defn ^::c/event-fx create
+(defn create
+  {::c/reg ::c/event-fx}
   [{:keys [db]} [_ icon message]]
   (let [key   (next-key (::toasts db))
         toast (make icon message key)]
     {:db              (assoc-in db [::toasts key] toast)
      ::timeouts.c/set (timeout toast)}))
 
-(defn ^::c/event-db assoc-timeout-id
+(defn assoc-timeout-id
+  {::c/reg ::c/event-db}
   [db [_ toast timeout-id]]
   (m/update-existing-in db [::toasts (:key toast)]
                         assoc :timeout-id timeout-id))
 
-(defn ^::c/event-fx set-timeout
+(defn set-timeout
+  {::c/reg ::c/event-fx}
   [_cofx [_ toast]]
   (when-not (some? (:timeout-id toast))
     {::timeouts.c/set (timeout toast)}))
 
-(defn ^::c/event-fx clear-timeout
+(defn clear-timeout
+  {::c/reg ::c/event-fx}
   [{:keys [db]} [_ toast]]
   (when-let [timeout-id (:timeout-id toast)]
     {::timeouts.c/clear timeout-id
      :db                (m/update-existing-in db [::toasts (:key toast)]
                                               dissoc :timeout-id)}))
 
-(defn ^::c/event-fx delete
+(defn delete
+  {::c/reg ::c/event-fx}
   [{:keys [db]} [_ toast]]
   (let [{:keys [key timeout-id]} toast]
     (cond-> {:db (m/dissoc-in db [::toasts key])}
@@ -58,7 +63,10 @@
 
 ;;; Subs
 
-(defn ^::c/sub toasts [db _] (::toasts db))
+(defn toasts
+  {::c/reg ::c/sub}
+  [db _]
+  (::toasts db))
 
 ;;; Module
 

@@ -6,7 +6,9 @@
 
 ;;; Views
 
-(defn ^::v/view index []
+(defn index
+  {::v/reg ::v/view}
+  []
   [:> js/ReactTransitionGroup.TransitionGroup {:class "toasts"}
    (for [[key toast] @(rf/subscribe [::toasts.c/toasts])
          :let [{:keys [open icon message]} toast]]
