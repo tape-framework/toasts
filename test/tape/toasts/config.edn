@@ -1,5 +1,4 @@
-{:tape.mvc.controller/module nil
- :tape.mvc.view/module nil
+{:tape.mvc/module nil
  :tape.tools.timeouts.controller/module nil
  :tape.toasts.controller/module nil
  :tape.toasts.view/module nil}

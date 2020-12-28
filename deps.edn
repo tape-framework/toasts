@@ -1,7 +1,7 @@
-{:paths   ["src" "resources"]
- :deps    {medley/medley                 {}
-           cljsjs/react-transition-group {}
-           tape/mvc                      {:local/root "../mvc"}
-           tape/tools                    {:local/root "../tools"}}
+{:paths ["src" "resources"]
+ :deps {medley/medley {}
+        cljsjs/react-transition-group {}
+        tape/mvc {:local/root "../mvc"}
+        tape/tools {:local/root "../tools"}}
  :aliases {:test {:extra-paths ["test" "target"]
-                  :extra-deps  {tape/dev {:local/root "../dev"}}}}}
+                  :extra-deps {tape/dev {:local/root "../dev"}}}}}
