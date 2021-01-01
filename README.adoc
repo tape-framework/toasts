@@ -1,27 +1,29 @@
-## README
-
-STATUS: Pre-alpha, in design and prototyping phase.
-
-### About
+== README
 
 `tape.toasts`
 
+=== About
+
 A Toast is a non-modal, unobtrusive window element used to display brief,
-auto-expiring windows of information to a user. 
+auto-expiring windows of information to a user.
 
-### Install
+=== Install
 
-```clojure
+.deps.edn
+[source,clojure]
+----
 {:deps {tape/toasts {:local/root "../toasts"}}}
-```
+----
 
-### Usage
+=== Usage
 
-#### List toasts
+==== List toasts
 
 Add toasts listing to a layout view via `toasts.v/index` partial:
 
-```clojure
+.app/layout/view.cljs
+[source,clojure]
+----
 (ns my.app.layout.view
   (:require [tape.toasts.view :as toasts.v]))
 
@@ -29,29 +31,33 @@ Add toasts listing to a layout view via `toasts.v/index` partial:
   [:div
     ...
     [toasts.v/index]])
-```
+----
 
-The style is based on [Bulma](https://bulma.io/), but you can use your own
+The style is based on https://bulma.io/[Bulma], but you can use your own
 style based on it's classes or make your own partial for listing. To include
 the style add:
 
-```clojure
+.hiccup
+[source,clojure]
+----
 [:link {:rel "stylesheet" :href "/tape/toasts.css"}]
-```
+----
 
-#### Create a toast
+==== Create a toast
 
-```clojure
+.app/some/controller.cljs
+[source,clojure]
+----
 (ns my.app.some.controller
   (:require [re-frame.core :as rf]
             [tape.toasts.controller :as toasts.c]))
 
 (rf/dispatch [::toasts.c/create :info "Some message"])
 ;; Toast kind can be one of: :success, :danger, :warning, :info
-```
+----
 
-#### License
+=== License
 
-Copyright © 2019 clyfe
+Copyright © 2020 clyfe
 
 Distributed under the MIT license.
